@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <div class="w-100" style="max-width: 75%; min-width: 300px;">
+            <h1 class="text-center" style="padding-top: 60px; color: #051657;">Fuel Service Provider Registration</h1>
+
+            <!-- Display Django messages -->
+            {% if messages %}
+                <div class="mt-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'fuel_service_providers' %}" class="mt-4" autocomplete="off">
+                {% csrf_token %}
+
+                <!-- Row 1: Registered Name -->
+                <div class="form-group row">
+                    <label for="registered_name" class="col-sm-4 col-form-label">Registered Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="registered_name" name="registered_name" value="{{ registered_name }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 2: Trading Name -->
+                <div class="form-group row">
+                    <label for="trading_name" class="col-sm-4 col-form-label">Trading Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="trading_name" name="trading_name" value="{{ trading_name }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 3: Billing Address -->
+                <div class="form-group row">
+                    <label for="billing_address" class="col-sm-4 col-form-label">Billing Address:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="billing_address" name="billing_address" value="{{ billing_address }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 4: Supplier TIN -->
+                <div class="form-group row">
+                    <label for="supplier_TIN" class="col-sm-4 col-form-label">Supplier TIN:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="supplier_TIN" name="supplier_TIN" value="{{ supplier_TIN }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 5: Supplier VAT -->
+                <div class="form-group row">
+                    <label for="supplier_VAT" class="col-sm-4 col-form-label">Supplier VAT:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="supplier_VAT" name="supplier_VAT" value="{{ supplier_VAT }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 6: Email -->
+                <div class="form-group row">
+                    <label for="email_address" class="col-sm-4 col-form-label">Email:</label>
+                    <div class="col-sm-8">
+                        <input type="email" class="form-control" id="email_address" name="email_address" value="{{ email_address }}" maxlength="100" required>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button id="button" type="submit" class="btn" name="fuel_service_providers" value="save" style="background-color: #051657; color: white; width: 100px;">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

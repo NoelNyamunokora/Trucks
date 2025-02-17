@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Transporter Statement Form</h1>
+    <form method="POST" action="{% url 'transporter_statement' %}">
+        {% csrf_token %}
+        {{ transporter_statement.as_p }}
+        <!-- Row 1: Transporter Name -->
+        <div class="form-group">
+            <label for="transporter_name">Transporter Name:</label>
+            <input type="text" class="form-control" id="transporter_name" name="transporter_name" value="{{ transporter_name }}" maxlength="200" required>
+        </div>
+
+        <!-- Row 2: Date From and Date To -->
+        <div class="form-group row">
+            <div class="col-md-6">
+                <label for="date_from">Date From:</label>
+                <input type="date" class="form-control" id="date_from" name="date_from" value="{{ date_from }}" required>
+            </div>
+            <div class="col-md-6">
+                <label for="date_to">Date To:</label>
+                <input type="date" class="form-control" id="date_to" name="date_to" value="{{ date_to }}" required>
+            </div>
+        </div>
+
+        <button id="button" type="submit" class="btn btn-primary" name="transporter_statement" value="save">Submit</button>
+    </form>
+
+    <h3 class="mt-5">Transporter Statements</h3>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Transporter ID</th>
+                <th>Transporter Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for statement in statements %}
+            <tr>
+                <td>{{ statement.id }}</td>
+                <td>{{ statement.transporter_name }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No statements available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

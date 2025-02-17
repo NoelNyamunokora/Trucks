@@ -1,0 +1,67 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django Project{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: white; /* Light blue background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure the body takes at least the full height of the viewport */
+            font-family: Bahnschrift;
+        }
+        .header {
+            background-color: #1e293b; /* Bright blue header */
+            color: white;
+            padding: 20px 0;
+        }
+        .footer {
+            background-color: #1e293b; /* Bright blue footer */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto; /* Push the footer to the bottom */
+        }
+        .logo {
+            height: 50px; /* Adjust logo height */
+        }
+        .content {
+            flex: 1; /* Allow the content area to grow and fill the available space */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="container d-flex align-items-center flex-wrap">
+        <div class="text-center flex-grow-1">
+            <h1 class="h4">Insburg Freight Logistics</h1>
+            <p class="mb-0">To provide distinctive logistics solutions by building win-win relationships</p>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container content">
+    {% block content %}
+    <!-- Content will be injected here -->
+    {% endblock %}
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 Synchronized Enterprises. All rights reserved. | S. MUNETSI & N. NYAMUNOKORA</p>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

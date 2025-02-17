@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <div class="w-100" style="max-width: 600px;"> <!-- Set a max width for the form container -->
+            <h3 class="text-center" style="padding-top: 60px">Truck Type Registration</h3>
+            <hr/>
+            <form method="POST" action="{% url 'truck_type' %}" class="mt-4">
+                   {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+                {% csrf_token %}
+
+                <!-- Row 1: Truck Type -->
+                <div class="form-group row justify-content-center">
+                    <label for="truck_type" class="col-md-4 col-form-label text-md-right">Truck Type:</label>
+                    <div class="col-md-8"> <!-- Adjusted width -->
+                        <select class="form-control" id="truck_type" name="truck_type" required>
+                            <option value="" disabled selected>Select Truck Type</option>
+                            <option value="Flatbed Truck">Flatbed Truck</option>
+                            <option value="Box Truck">Box Truck</option>
+                            <option value="Dump Truck">Dump Truck</option>
+                            <option value="Reefer Truck">Reefer Truck</option>
+                            <option value="Tanker Truck">Tanker Truck</option>
+                            <option value="Fire Truck">Fire Truck</option>
+                            <option value="Pickup Truck">Pickup Truck</option>
+                            <option value="Cargo Van">Cargo Van</option>
+                            <option value="Semi-Trailer Truck">Semi-Trailer Truck</option>
+                            <option value="Lowboy Truck">Lowboy Truck</option>
+                            <option value="Step Deck Truck">Step Deck Truck</option>
+                            <option value="Hopper Truck">Hopper Truck</option>
+                            <option value="Auto Hauler">Auto Hauler</option>
+                            <option value="Bull Hauler">Bull Hauler</option>
+                            <option value="Container Hauler">Container Hauler</option>
+                            <option value="Specialized Trailer">Specialized Trailer</option>
+                            <option value="Conestoga Trailer">Conestoga Trailer</option>
+                            <option value="Stretch RGN Trailer">Stretch RGN Trailer</option>
+                            <option value="Double Drop Trailer">Double Drop Trailer</option>
+                            <option value="Removable Gooseneck Trailer (RGN)">Removable Gooseneck Trailer (RGN)</option>
+                            <option value="Power Only Truck">Power Only Truck</option>
+                            <option value="Sprinter Van">Sprinter Van</option>
+                            <option value="Straight Truck">Straight Truck</option>
+                            <option value="Flatbed Stretch Trailer">Flatbed Stretch Trailer</option>
+                            <option value="Extendable Flatbed Trailer">Extendable Flatbed Trailer</option>
+                            <option value="Super B Trailer">Super B Trailer</option>
+                            <option value="Double Drop Stretch Trailer">Double Drop Stretch Trailer</option>
+                            <option value="Side Kit Trailer">Side Kit Trailer</option>
+                            <option value="Grain Hauler (Hopper)">Grain Hauler (Hopper)</option>
+                            <option value="Hot Shot Truck">Hot Shot Truck</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 2: Load Tonnage -->
+                <div class="form-group row justify-content-center">
+                    <label for="load_tonnage" class="col-md-4 col-form-label text-md-right">Load Tonnage:</label>
+                    <div class="col-md-8"> <!-- Adjusted width -->
+                        <input type="text" class="form-control" id="load_tonnage" name="load_tonnage" value="{{ load_tonnage }}" maxlength="200" required placeholder="Enter Load Tonnage">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <button id="button" type="submit" class="btn" style="background-color: #1e293b; color: white; border: none; width: 100px;">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

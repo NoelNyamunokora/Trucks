@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white; /* Light blue background */
+            font-family: Bahnschrift;
+        }
+        .header {
+            background-color: #1e293b; /* Bright blue header */
+            color: white;
+            padding: 20px 0;
+        }
+        .logo {
+            height: 50px; /* Adjust logo height */
+        }
+        .login-container {
+            max-width: 350px; /* Set a max width for the form */
+            margin: 120px auto; /* Center the form */
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border: none; /* Remove default border */
+            border-bottom: 1px solid #1e293b; /* Add a bottom border */
+            border-radius: 0; /* Remove border radius */
+            box-shadow: none; /* Remove box shadow */
+        }
+        .form-control:focus {
+            box-shadow: none; /* Remove box shadow on focus */
+            border-color: #1e293b; /* Change border color on focus */
+        }
+        .form-check-input {
+            margin-top: 0.3rem; /* Adjust checkbox position */
+        }
+        #login {
+            width: 70px; /* Full width for the button */
+            background-color: #1e293b; /* Match header color */
+            border: none; /* Remove default border */
+            color: white; /* Text color */
+        }
+        #login:hover {
+            background-color: #051657; /* Darker shade on hover */
+        }
+         a{
+            color: #051657; /* Darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+{% block body %}
+
+<!-- Header -->
+<header class="header">
+    <div class="container d-flex align-items-center flex-wrap">
+        <div class="text-center flex-grow-1">
+            <h1 class="h2">Insburg Freight Logistics</h1>
+            <p class="mb-0">To provide distinctive logistics solutions by building win-win relationships</p>
+        </div>
+    </div>
+</header>
+
+<!-- Login Form -->
+<div class="login-container">
+    <h2 class="text-center">Login</h2>
+    <form method="POST" action="{% url 'home' %}" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="showPassword">
+                <label class="form-check-label" for="showPassword">Show Password</label>
+            </div>
+        </div>
+        <button id="login" type="submit" class="btn">Login</button>
+        <div class="text-center mt-3">
+            <a href="{% url 'signup' %}">Sign Up</a> |
+            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Show password functionality
+    document.getElementById('showPassword').addEventListener('change', function() {
+        const passwordField = document.getElementById('password');
+        passwordField.type = this.checked ? 'text' : 'password';
+    });
+</script>
+</body>
+</html>

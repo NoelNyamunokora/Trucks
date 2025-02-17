@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Activity Log</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include the xlsx library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Bahnschrift', sans-serif;
+            background-color: #f8fafc;
+            margin: 20px;
+        }
+        .table_head_row th {
+            background-color: #1e293b;
+            color: white;
+            font-size: 18px;
+        }
+        .entry-count {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #1e293b; /* Blue button */
+            color: white;
+            margin-right: 10px; /* Add spacing between buttons */
+        }
+        .btn:hover {
+            background-color: white; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+   <div class="container-fluid">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Transport Orders Pending Approval</h3>
+    </div>
+    <hr/>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="search" id="search-input" class="form-control" placeholder="...Search..." onkeyup="searchTable()">
+        </div>
+        <div class="col-md-4">
+            <button class="btn" id="print-button">Print Report</button>
+            <button class="btn" id="export-excel-button">Export to Excel</button>
+        </div>
+    </div>
+    <br/>
+
+    <div id="entry-count" class="entry-count"></div>
+    <div class="table-responsive">
+        <table class="table table-striped" id="data-table">
+            <thead>
+                <tr class="table_head_row">
+                  <th>ID</th>
+                <th>Order_Number</th>
+                <th>Date</th>
+                <th>Transporter Name</th>
+                 <th>Driver</th>
+                 <th>Truck Reg Number</th>
+                 <th>Trailer 1 Reg Number</th>
+               <th>Trailer 2 Reg Number</th>
+               <th>Container Number</th>
+              <th>Booking Reference</th>
+              <th>Route</th>
+               <th>Product</th>
+               <th>Charge($)</th>
+              <th>Charge Type</th>
+              <th>Linked Order</th>
+               <th>Customer Invoice Number</th>
+               <th>POD Number</th>
+              <th>Sales Order Number</th>
+              <th>Status</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+           {% for  transport_order in transport_order %}
+                <tr style="font-size: 15px">
+                  <td>{{ transport_order.id }}</td>
+                <td>{{ transport_order.order_number }}</td>
+                <td>{{ transport_order.date }}</td>
+                <td>{{ transport_order.transporter_name }}</td>
+                 <td>{{ transport_order.driver }}</td>
+                <td>{{ transport_order.truck_reg_number }}</td>
+                <td>{{ transport_order.trailer1_reg_number }}</td>
+                <td>{{ transport_order.trailer2_reg_number }}</td>
+               <td>{{ transport_order.container_number }}</td>
+                <td>{{ transport_order.booking_ref}}</td>
+                <td>{{ transport_order.route }}</td>
+                <td>{{ transport_order.product }}</td>
+               <td>{{ transport_order.charge }}</td>
+                <td>{{ transport_order.charge_type}}</td>
+                <td>{{ transport_order.linked_order }}</td>
+                <td>{{ transport_order.customer_invoice_number }}</td>
+               <td>{{ transport_order.POD_number }}</td>
+                <td>{{ transport_order.sales_order_number }}</td>
+                <td>{{ transport_order.status }}</td>
+                <td>
+                    <a href="{% url 'approve_transport_order' transport_order.id %}" class="btn btn-success btn-sm">Approve</a>
+                    <a href="{% url 'decline_transport_order' transport_order.id %}" class="btn btn-danger btn-sm">Decline</a>
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <script>
+        function updateEntryCount() {
+            const tableRows = document.querySelectorAll('table tbody tr');
+            const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+            document.getElementById('entry-count').innerText = `Number of entries: ${visibleRows.length}`;
+        }
+
+        function searchTable() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const tableRows = document.querySelectorAll('table tbody tr');
+
+            tableRows.forEach((row) => {
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            updateEntryCount(); // Update the entry count after filtering
+        }
+
+        // Print functionality
+        const printButton = document.getElementById('print-button');
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Export to Excel functionality
+        const exportExcelButton = document.getElementById('export-excel-button');
+        exportExcelButton.addEventListener('click', () => {
+            const table = document.getElementById('data-table'); // Get the table element
+            const workbook = XLSX.utils.table_to_book(table); // Convert table to workbook
+            XLSX.writeFile(workbook, 'Sales_Orders_Summary.xlsx'); // Export as Excel file
+        });
+
+        // Initial count display
+        window.onload = updateEntryCount; // Call to update count when the page loads
+    </script>
+</body>
+</html>

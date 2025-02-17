@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Activity Log</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include the xlsx library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+        body {
+            font-family: 'Bahnschrift', sans-serif;
+            background-color: #f8fafc;
+            margin: 20px;
+        }
+        .table_head_row th {
+            background-color: #1e293b;
+            color: white;
+            font-size: 18px;
+        }
+        .entry-count {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            background-color: #1e293b; /* Blue button */
+            color: white;
+            margin-right: 10px; /* Add spacing between buttons */
+        }
+        .btn:hover {
+            background-color: white; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+   <div class="container-fluid">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Transport Order Report</h3>
+    </div>
+    <hr/>
+    <br/>
+    <div class="row">
+        <div class="col-md-4">
+            <input type="search" id="search-input" class="form-control" placeholder="...Search..." onkeyup="searchTable()">
+        </div>
+        <div class="col-md-4">
+            <button class="btn" id="print-button">Print Report</button>
+            <button class="btn" id="export-excel-button">Export to Excel</button>
+        </div>
+    </div>
+    <br/>
+
+    <div id="entry-count" class="entry-count"></div>
+    <div class="table-responsive">
+        <table class="table table-striped" id="data-table">
+            <thead>
+                <tr class="table_head_row">
+                  <th>ID</th>
+                <th>Order Number</th>
+                <th>Date</th>
+                <th>Transporter Name</th>
+                <th>Driver</th>
+                <th>Truck Registration Number</th>
+                <th>Trailer 1 Registration Number</th>
+                <th>Trailer 2 Registration Number</th>
+                <th>Container Number</th>
+                <th>Booking Reference</th>
+                <th>Route</th>
+                <th>Product</th>
+                <th>Charge</th>
+                <th>Charge Type</th>
+                <th>Customer Invoice Number</th>
+                <th>POD Number</th>
+                <th>Sales Order Number</th>
+                 <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+               {% for transport_order_raised in transport_order_raised %}
+                <tr style="font-size: 15px">
+                  <td>{{ transport_order_raised.id }}</td>
+                <td>{{ transport_order_raised.order_number }}</td>
+                <td>{{ transport_order_raised.date }}</td>
+                <td>{{ transport_order_raised.transporter_name }}</td>
+                <td>{{ transport_order_raised.driver }}</td>
+                <td>{{ transport_order_raised.truck_reg_number }}</td>
+                <td>{{ transport_order_raised.trailer1_reg_number }}</td>
+                <td>{{ transport_order_raised.trailer2_reg_number }}</td>
+                <td>{{ transport_order_raised.container_number }}</td>
+                <td>{{ transport_order_raised.booking_ref }}</td>
+                <td>{{ transport_order_raised.route }}</td>
+                <td>{{ transport_order_raised.product }}</td>
+                <td>{{ transport_order_raised.charge }}</td>
+                <td>{{ transport_order_raised.charge_type }}</td>
+                <td>{{ transport_order_raised.customer_invoice_number }}</td>
+                <td>{{ transport_order_raised.POD_number }}</td>
+                <td>{{ transport_order_raised.sales_order_number }}</td>
+                <td>{{ transport_order_raised.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <script>
+        function updateEntryCount() {
+            const tableRows = document.querySelectorAll('table tbody tr');
+            const visibleRows = Array.from(tableRows).filter(row => row.style.display !== 'none');
+            document.getElementById('entry-count').innerText = `Number of entries: ${visibleRows.length}`;
+        }
+
+        function searchTable() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const tableRows = document.querySelectorAll('table tbody tr');
+
+            tableRows.forEach((row) => {
+                const rowText = row.textContent.toLowerCase();
+                if (rowText.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            updateEntryCount(); // Update the entry count after filtering
+        }
+
+        // Print functionality
+        const printButton = document.getElementById('print-button');
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+
+        // Export to Excel functionality
+        const exportExcelButton = document.getElementById('export-excel-button');
+        exportExcelButton.addEventListener('click', () => {
+            const table = document.getElementById('data-table'); // Get the table element
+            const workbook = XLSX.utils.table_to_book(table); // Convert table to workbook
+            XLSX.writeFile(workbook, 'Sales_Orders_Summary.xlsx'); // Export as Excel file
+        });
+
+        // Initial count display
+        window.onload = updateEntryCount; // Call to update count when the page loads
+    </script>
+</body>
+</html>

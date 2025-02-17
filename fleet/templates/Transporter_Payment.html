@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Display messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Form Container -->
+    <div class="container d-flex justify-content-center">
+        <div class="w-100" style="max-width: 75%; min-width: 300px;">
+            <h1 class="text-center" style="padding-top: 60px; color: #051657;">Transporter Payment</h1>
+            <form method="POST" action="{% url 'transporter_payment' %}" class="mt-4" autocomplete="off">
+                {% csrf_token %}
+
+                <!-- Row 1: Date -->
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" class="form-control" id="date" name="date" value="{{ date }}" required style="max-width: 150px;">
+                </div>
+
+                <!-- Row 2: Transporter -->
+                <div class="form-group">
+                    <label for="transporter">Transporter:</label>
+                    <input type="text" class="form-control" id="transporter" name="transporter" value="{{ transporter }}" maxlength="200" required style="max-width: 250px;">
+                </div>
+
+                <!-- Row 3: Payment Type and Source Reference -->
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="payment_type">Payment Type:</label>
+                        <select class="form-control" id="payment_type" name="payment_type" required>
+                            <option value="" {% if payment_type == "" %}selected{% endif %}>Select Payment Type</option>
+                            <option value="cash" {% if payment_type == "cash" %}selected{% endif %}>Cash</option>
+                            <option value="fuel" {% if payment_type == "fuel" %}selected{% endif %}>Fuel</option>
+                            <option value="transfer" {% if payment_type == "transfer" %}selected{% endif %}>Transfer</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="source_ref">Source Reference:</label>
+                        <input type="text" class="form-control" id="source_ref" name="source_ref" value="{{ source_ref }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 4: Truck Reg Number and Service Provider -->
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label for="truck_reg_number">Truck Reg Number:</label>
+                        <input type="text" class="form-control" id="truck_reg_number" name="truck_reg_number" value="{{ truck_reg_number }}" maxlength="200" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="service_provider">Service Provider:</label>
+                        <input type="text" class="form-control" id="service_provider" name="service_provider" value="{{ service_provider }}" maxlength="200" required>
+                    </div>
+                </div>
+
+                <!-- Row 5: Quantity, Unit Price, and Payment Amount -->
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="{{ quantity }}" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="unit_price">Unit Price:</label>
+                        <input type="number" class="form-control" id="unit_price" name="unit_price" value="{{ unit_price }}" step="0.01" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="payment_amount">Payment Amount:</label>
+                        <input type="number" class="form-control" id="payment_amount" name="payment_amount" value="{{ payment_amount }}" step="0.01" required>
+                    </div>
+                </div>
+
+                <!-- Row 6: Matched Orders -->
+                <div class="form-group">
+                    <label for="matched_orders">Matched Orders:</label>
+                    <textarea class="form-control" id="matched_orders" name="matched_orders" rows="3" placeholder="Enter matched orders if any...">{{ matched_orders }}</textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button id="button" type="submit" class="btn" name="transporter_payment" value="save" style="background-color: #051657; color: white; width: 100px;">Submit</button>
+                </div>
+                <br/>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript for Dynamic Calculation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const quantityInput = document.getElementById('quantity');
+            const unitPriceInput = document.getElementById('unit_price');
+            const paymentAmountInput = document.getElementById('payment_amount');
+
+            function calculatePaymentAmount() {
+                const quantity = parseFloat(quantityInput.value) || 0;
+                const unitPrice = parseFloat(unitPriceInput.value) || 0;
+                paymentAmountInput.value = (quantity * unitPrice).toFixed(2);
+            }
+
+            quantityInput.addEventListener('input', calculatePaymentAmount);
+            unitPriceInput.addEventListener('input', calculatePaymentAmount);
+        });
+    </script>
+{% endblock %}

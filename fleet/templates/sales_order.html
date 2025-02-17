@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Form{% endblock %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <div class="w-100" style="max-width: 75%; min-width: 300px;">
+            <h3 class="text-center" style="padding-top: 60px; color: #051657;">Sales Order</h3><hr/>
+
+            <!-- Display Django messages -->
+            {% if messages %}
+                <div class="mt-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'sales_order' %}" class="mt-4" autocomplete="off">
+                {% csrf_token %}
+
+                <!-- Row 1: Date -->
+                <div class="form-group row">
+                    <label for="date" class="col-sm-2 col-form-label">Date:</label>
+                    <div class="col-sm-10">
+                        <input id="date" type="date" class="form-control" name="date" value="{{ date }}" required style="width: 200px">
+                    </div>
+                </div>
+
+                <!-- Row 2: Customer, Product, Quantity --><div class="form-group row">
+                <label for="customer" class="col-sm-2 col-form-label">Customer:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="customer" name="customer" required>
+                        <option value="" disabled selected>Select a customer</option>
+                        {% for customer in customers %}
+                        <option value="{{ customer.registered_name }}">{{ customer.registered_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <label for="product" class="col-sm-2 col-form-label">Product:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="product" name="product" required>
+                        <option value="" disabled selected>Select a product</option>
+                        {% for product in products %}
+                        <option value="{{ product.product_name }}">{{ product.product_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+                <div class="form-group row">
+                    <label for="quantity" class="col-sm-2 col-form-label">Quantity:</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" id="quantity" name="quantity" value="{{ quantity }}" min="0" required>
+                    </div>
+                    <label for="UOM" class="col-sm-2 col-form-label">UOM:</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="UOM" name="UOM" value="{{ UOM }}" maxlength="50" required>
+                    </div>
+                </div>
+
+                <!-- Row 3: Truck Type, Number of Trucks, Route -->
+                <div class="form-group row">
+                    <label for="truck_type" class="col-sm-2 col-form-label">Truck Type:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="truck_type" name="truck_type" required>
+                            <option value="" disabled selected>Select Truck Type</option>
+                            <option value="Flatbed Truck" {% if truck_type == "Flatbed Truck" %}selected{% endif %}>Flatbed Truck</option>
+                            <option value="Box Truck" {% if truck_type == "Box Truck" %}selected{% endif %}>Box Truck</option>
+                            <option value="Dump Truck" {% if truck_type == "Dump Truck" %}selected{% endif %}>Dump Truck</option>
+                            <option value="Reefer Truck" {% if truck_type == "Reefer Truck" %}selected{% endif %}>Reefer Truck</option>
+                            <option value="Tanker Truck" {% if truck_type == "Tanker Truck" %}selected{% endif %}>Tanker Truck</option>
+                            <option value="Fire Truck" {% if truck_type == "Fire Truck" %}selected{% endif %}>Fire Truck</option>
+                            <option value="Pickup Truck" {% if truck_type == "Pickup Truck" %}selected{% endif %}>Pickup Truck</option>
+                            <option value="Cargo Van" {% if truck_type == "Cargo Van" %}selected{% endif %}>Cargo Van</option>
+                            <option value="Semi-Trailer Truck" {% if truck_type == "Semi-Trailer Truck" %}selected{% endif %}>Semi-Trailer Truck</option>
+                            <option value="Lowboy Truck" {% if truck_type == "Lowboy Truck" %}selected{% endif %}>Lowboy Truck</option>
+                            <option value="Other" {% if truck_type == "Other" %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    <label for="number_of_trucks" class="col-sm-2 col-form-label">Number of Trucks:</label>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" id="number_of_trucks" name="number_of_trucks" value="{{ number_of_trucks }}" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="route" class="col-sm-2 col-form-label">Route:</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="route" name="route" style="width: 350px" required>
+                            <option value="" disabled selected>Select a route</option>
+                            {% for route_item in route %}
+                            <option value="{{ route_item.id }}">{{ route_item.route_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button id="button" type="submit" class="btn" name="sales_order" value="save" style="background-color: #1e293b; color: white; width: 100px;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

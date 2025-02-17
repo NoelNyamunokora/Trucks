@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center">
+    <div class="w-100" style="max-width: 75%; min-width: 300px;"> <!-- Set max width to 75% and min width for smaller screens -->
+        <h3 class="text-center" style="padding-top: 60px; color: #051657;">Transport Order</h3>
+        <hr/>
+
+        <!-- Display messages -->
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'transport_order' %}" class="mt-4" autocomplete="off">
+            {% csrf_token %}
+
+            <!-- Row 1: Date -->
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ date }}" required style="width: 200px">
+            </div>
+
+            <!-- Row 2: Order Number and Sale Order Number -->
+            <div class="form-group row">
+                <div class="col">
+                    <label for="order_number">Order Number:</label>
+                    <input type="text" class="form-control" id="order_number" name="order_number" value="{{ order_number }}" maxlength="200" required>
+                </div>
+                <div class="col">
+                    <div class="col">
+                        <label for="sales_order">Sales Order:</label>
+                        <select class="form-control" id="sales_order" name="sales_order" required>
+                            <option value="" disabled selected>Select a Sales Order</option>
+                            {% for order in sales_orders %}
+                            <option value="{{ order.id }}">{{ order }}</option>  <!-- Display the string representation of the Sales_Order -->
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Transporter Name and Driver -->
+            <div class="form-group row">
+                <div class="col">
+    <label for="transporter">Transporter:</label>
+     <select class="form-control" id="transporter" name="transporter" required>
+            <option value="" disabled selected>Select a transporter</option>
+            {% for transporter in transporters %}
+                <option value="{{ transporter.id }}">{{ transporter.transporter_name }}</option>
+            {% endfor %}
+        </select>
+</div>
+                <div class="col">
+                    <label for="driver">Driver:</label>
+                    <input type="text" class="form-control" id="driver" name="driver" value="{{ driver }}" maxlength="200" required>
+                </div>
+            </div>
+
+            <!-- Row 4: Truck Reg Number, Trailer Reg Number 1 and 2 -->
+            <div class="form-group row">
+                <div class="col">
+                    <label for="truck_reg_number">Truck Reg Number:</label>
+                    <input type="text" class="form-control" id="truck_reg_number" name="truck_reg_number" value="{{ truck_reg_number }}" maxlength="200" required>
+                </div>
+                <div class="col">
+                    <label for="trailer1_reg_number">Trailer 1 Reg Number:</label>
+                    <input type="text" class="form-control" id="trailer1_reg_number" name="trailer1_reg_number" value="{{ trailer1_reg_number }}" maxlength="200" required>
+                </div>
+                <div class="col">
+                    <label for="trailer2_reg_number">Trailer 2 Reg Number:</label>
+                    <input type="text" class="form-control" id="trailer2_reg_number" name="trailer2_reg_number" value="{{ trailer2_reg_number }}" maxlength="200">
+                </div>
+            </div>
+
+            <!-- Row 5: Container Number -->
+            <div class="form-group" style="display: flex; align-items: center; gap: 20px;">
+                <div>
+                    <label for="container_number">Container Number:</label>
+                    <input type="text" class="form-control" id="container_number" name="container_number" value="{{ container_number }}" maxlength="200" style="width: 300px;">
+                </div>
+
+                <div>
+                    <label for="POD_number">POD Number:</label>
+                    <input type="text" class="form-control" id="POD_number" name="POD_number" value="{{ POD_number }}" maxlength="200" style="width: 300px;">
+                </div>
+            </div>
+
+            <!-- Row 6: Booking Ref, Route, and Product -->
+            <div class="form-group row">
+                <div class="col">
+                    <label for="booking_ref">Booking Reference:</label>
+                    <input type="text" class="form-control" id="booking_ref" name="booking_ref" value="{{ booking_ref }}" maxlength="200">
+                </div>
+                <div class="col">
+                    <label for="route">Route:</label>
+                   <select class="form-control" id="route" name="route" required>
+            <option value="" disabled selected>Select a route</option>
+            {% for route in routes %}
+                <option value="{{ route.id }}">{{ route.route_name }}</option>
+            {% endfor %}
+        </select>
+                </div>
+                <div class="form-group row">
+    <div class="col">
+        <label for="product">Product:</label>
+        <select class="form-control" id="product" name="product" required>
+            {% for product in products %}
+            <option value="" disabled selected>Select a product</option>
+                <option value="{{ product.id }}">{{ product.product_name }}</option>  <!-- Use the correct field name -->
+            {% endfor %}
+        </select>
+    </div>
+</div>
+            </div>
+
+            <!-- Row 7: Charge and Charge Type -->
+            <div class="form-group row">
+                <div class="col">
+                    <label for="charge">Charge:</label>
+                    <input type="text" class="form-control" id="charge" name="charge" value="{{ charge }}" maxlength="200" required>
+                </div>
+                <div class="col">
+                    <label for="charge_type">Charge Type:</label>
+                    <select class="form-control" id="charge_type" name="charge_type" required>
+                        <option value="" disabled>Select charge type</option>
+                        <option value="Transport Fee">Transport Fee</option>
+                        <option value="Demurrage">Demurrage</option>
+                        <option value="Clearing and Other Fees">Clearing and Other Fees</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 8: Linked Order and Customer Invoice Number -->
+            <div class="form-group row">
+                <div class="col">
+                    <label for="customer_invoice_number">Customer Invoice Number:</label>
+                    <input style="width: 390px" type="text" class="form-control" id="customer_invoice_number" name="customer_invoice_number" value="{{ customer_invoice_number }}" maxlength="200">
+                </div>
+            </div>
+
+            <div>
+                <button id="button" type="submit" class="btn" name="transport_order" value="save" style="background-color: #1e293b; color: white; width: 100px;">Submit</button>
+            </div>
+            <br/>
+        </form>
+    </div>
+</div>
+{% endblock %}

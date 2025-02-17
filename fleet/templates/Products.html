@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center">
+        <div class="w-100" style="max-width: 75%; min-width: 300px;">
+            <h3 class="text-center" style="padding-top: 60px; color: #051657;">Products Form</h3>
+            <hr/>
+
+            <!-- Display Django messages -->
+            {% if messages %}
+                <div class="mt-4">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'products' %}" style="padding-top: 20px;" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="form-group row">
+                    <label for="product_name" class="col-sm-4 col-form-label">Product Name:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="product_name" name="product_name" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="product_description" class="col-sm-4 col-form-label">Product Description:</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="product_description" name="product_description" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="UOM" class="col-sm-4 col-form-label">Unit of Measure (UOM):</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="UOM" name="UOM" required>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+    <label for="truck_type" class="col-sm-4 col-form-label">Truck Type:</label>
+    <div class="col-sm-8">
+        <select class="form-control" id="truck_type" name="truck_type" required>
+            <option value="" disabled selected>Select Truck Type</option>
+            <option value="Flatbed Truck">Flatbed Truck</option>
+            <option value="Box Truck">Box Truck</option>
+            <option value="Dump Truck">Dump Truck</option>
+            <option value="Reefer Truck">Reefer Truck</option>
+            <option value="Tanker Truck">Tanker Truck</option>
+            <option value="Fire Truck">Fire Truck</option>
+            <option value="Pickup Truck">Pickup Truck</option>
+            <option value="Cargo Van">Cargo Van</option>
+            <option value="Semi-Trailer Truck">Semi-Trailer Truck</option>
+            <option value="Lowboy Truck">Lowboy Truck</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+</div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button id="button" type="submit" class="btn" style="background-color: #1e293b; color: white; width: 100px; margin-left: 283px">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
